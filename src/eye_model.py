@@ -14,43 +14,9 @@ from random import random
 
 seed(1)
 
-# class simple_mod(nn.Module):
-#     def __init__(self):
-#         super(simple_mod, self).__init__()
-#         self.loss_model = nn.Sigmoid()
-#         self.model = nn.Sequential(
-#             nn.Linear(24000, 2400),
-#             nn.ReLU(),
-#             nn.Linear(2400, 1200),
-#             nn.ReLU(),
-#             nn.Linear(1200, 600),
-#             nn.ReLU(),
-#             nn.Linear(600, 512),
-#             nn.ReLU(),
-#             nn.Linear(512, 256),
-#             nn.ReLU(),
-#             nn.Linear(256, 128),
-#             nn.ReLU(),
-#             nn.Linear(128, 1)
-#         )
-
-#     def forward(self, x):
-#         x = x.float()
-#         x = x.view(24000)
-#         x = self.model.forward(x)
-#         return x
-
-#     def backward(self, loss):
-#         loss.backward()
-
-#     def predict(self, data):
-#         outputs = self.forward(data)
-#         return outputs
-
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
-        self.loss_model = nn.Sigmoid()
         self.model = nn.Sequential(
             nn.Conv3d(in_channels=1, out_channels=2, kernel_size=(1, 3, 3), padding=(0, 2, 2)),
             nn.MaxPool3d((1, 2, 2)),
@@ -123,8 +89,8 @@ fake, real = get_data()
 cnn = CNN()
 
 
-loss_model = nn.MSELoss()
-optimizer = torch.optim.SGD(cnn.model.parameters(), lr=0.01)
+loss_model = nn.BCELoss()
+optimizer = torch.optim.Adam(cnn.model.parameters(), lr=0.01)
 for i in range(500):
     i = random() % 2
     if (i == 0):
