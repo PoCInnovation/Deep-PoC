@@ -4,3 +4,13 @@ img_height = 100
 
 img_width_down = 200
 img_height_down = 40
+
+PATH_TRAINING_FAKE_CROPPED = './training/eye_corpped_fake_training/'
+PATH_TRAINING_REAL_CROPPED = './training/eye_corpped_real_training/'
+PATH_TRAINING_FAKE = './training/face_fake_training/'
+PATH_TRAINING_REAL = './training/face_real_training/'
+
+PATH_PREDICT_FAKE_CROPPED = './predict/eye_corpped_fake_predict/'
+PATH_PREDICT_REAL_CROPPED = './predict/eye_corpped_real_predict/'
+PATH_PREDICT_FAKE = './predict/face_fake_predict/'
+PATH_PREDICT_REAL = './predict/face_real_predict/'

@@ -31,12 +31,12 @@ def create_contraste(image, color = 1, contrast = 1, brightness = 1, sharpness =
     image = enhancer.enhance(brightness)
     enhancer = ImageEnhance.Sharpness(image)
     image = enhancer.enhance(sharpness)
-    image.save("thumbnail.jpeg")
+    # image.save("thumbnail.jpeg")
     return image
 
 def load_image_from_path(path_name):
     im = Image.open(path_name)
-    im = create_contraste(im, 1, 2, 2, 1)
+    im = create_contraste(im, 2, 1, 1, 1)
     im = pil_to_tensor(im)
     img = tensor_rescale_normalize(im)
     return img

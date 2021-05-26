@@ -4,8 +4,8 @@ from os import listdir
 from os.path import isfile, join
 
 ##fake
-mypath = './face_fake/'
-folder_save = './eye_corpped_fake/'
+mypath = './face_fake_predict/'
+folder_save = './eye_corpped_fake_predict/'
 
 left = 287
 top = 440
@@ -18,6 +18,7 @@ def get_all_file():
     return (file_list)
 
 def crop_image(path):
+    print(path)
     im = Image.open(path)
     im = im.crop((left, top, right, bottom))
     path = path.split("/")

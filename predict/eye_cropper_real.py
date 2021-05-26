@@ -3,9 +3,9 @@ import PIL
 from os import listdir
 from os.path import isfile, join
 
-##eal
-mypath = './face_real/'
-folder_save = './eye_corpped_real/'
+##real
+mypath = './face_real_predict/'
+folder_save = './eye_corpped_real_predict/'
 
 left = 287
 top = 440
@@ -18,6 +18,7 @@ def get_all_file():
     return (file_list)
 
 def crop_image(path):
+    print(path)
     im = Image.open(path)
     im = im.crop((left, top, right, bottom))
     path = path.split("/")

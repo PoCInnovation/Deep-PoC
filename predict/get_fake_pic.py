@@ -4,7 +4,7 @@ from os import listdir
 from os.path import isfile, join
 from time import *
 
-mypath = './face_fake/'
+mypath = './face_fake_predict/'
 src = 'https://thispersondoesnotexist.com/image'
 
 
@@ -19,13 +19,15 @@ def get_all_file_nbr():
     return (file_list)
 
 def create_new_image():
+    sleep(1)
     file_id_list = get_all_file_nbr()
     for i, elmnt in enumerate(file_id_list):
         if (i != elmnt):
-            request.urlretrieve(src, 'face_fake/' + str(i) + '.jpeg')
+            request.urlretrieve(src, 'face_fake_predict/' + str(i) + '.jpeg')
+            print("created: ", str(i))
             return
-    request.urlretrieve(src, 'face_fake/' + str(len(file_id_list)) + '.jpeg')
-    sleep(1)
+    request.urlretrieve(src, 'face_fake_predict/' + str(len(file_id_list)) + '.jpeg')
+    print("created: ", str(len(file_id_list)))
 
-for i in range(200):
+for i in range(100):
     create_new_image()
