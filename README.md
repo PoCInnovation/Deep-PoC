@@ -31,4 +31,4 @@ The project is comprised of 3 parts : The Frontend, Backend, and AI detection.
 ------------
 ## Maintainers
 
- - [Victor GUyot](https://github.com/MrSIooth)
+ - [Victor Guyot](https://github.com/MrSIooth)
