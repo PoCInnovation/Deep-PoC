@@ -6,122 +6,73 @@ import torch
 import torch.nn.functional as F
 import torch.nn as nn
 import torch.utils.data as dataloader
+import csv
 
 from env import *
 from cnn_model import *
 from image_treatment import *
+from image_gest import *
+from benchmark_excel import *
 
-EPOCH = 20
-
-def get_training_images_from_directories():
-    fake = [PATH_TRAINING_FAKE_CROPPED + f for f in listdir(PATH_TRAINING_FAKE_CROPPED) if ('.jpeg' in f)]
-    real = [PATH_TRAINING_REAL_CROPPED + f for f in listdir(PATH_TRAINING_REAL_CROPPED) if ('.png' in f)]
-    return (fake, real)
-
-def get_predict_images_from_directories():
-    fake = [PATH_PREDICT_FAKE_CROPPED + f for f in listdir(PATH_PREDICT_FAKE_CROPPED) if ('.jpeg' in f)]
-    real = [PATH_PREDICT_REAL_CROPPED + f for f in listdir(PATH_PREDICT_REAL_CROPPED) if ('.png' in f)]
-    return (fake, real)
-
-
-def get_max_with_the_current_data(real, fake):
-    image_size = 0
-    if (len(fake) - len(fake) % 64 < len(real) - len(real) % 64):
-        image_size = len(fake) - len(fake) % 64
-    else:
-        image_size = len(real) - len(real) % 64
-    return (image_size)
-
-def create_random_training_dataset():
-    fake, real = get_training_images_from_directories()
-    image_size = get_max_with_the_current_data(real, fake)
-    print(image_size)
-
-    images_data = np.zeros((image_size * 2, 3, img_width_down, img_height_down))
-    expected = np.zeros((image_size * 2))
-    random_index = torch.randperm(image_size * 2)
-
-    for index_f in range(image_size):
-        images_data[random_index[index_f * 2]] = load_image_from_path(fake[index_f])
-        expected[random_index[index_f * 2]] = 0
-
-        images_data[random_index[index_f * 2 + 1]] = load_image_from_path(real[index_f])
-        expected[random_index[index_f * 2 + 1]] = 1
-
-    print(index_f)
-    return (torch.tensor(images_data).view(-1, 64, 3, 200, 40), torch.tensor(expected).view(-1, 64, 1).float())
-
-def reshuffle_data(fake, expected):
-    fake = fake.view(-1, 3, 200, 40)
-    expected = expected.view(-1, 1)
-    image_size = fake.size()[0]
-    print(image_size)
-    images_data = np.zeros((image_size, 3, img_width_down, img_height_down))
-    images_expected = np.zeros((image_size))
-    random_index = torch.randperm(image_size)
-
-    for index_f in range(image_size):
-        images_data[random_index[index_f]] = fake[index_f]
-        images_expected[random_index[index_f]] = expected[index_f]
-    return (torch.tensor(images_data).view(-1, 64, 3, 200, 40), torch.tensor(images_expected).view(-1, 64, 1).float())
-
-
-def create_random_predict_dataset():
-    fake, real = get_predict_images_from_directories()
-    image_size = len(real)
-    if (len(fake) < len(real)):
-        image_size = len(fake)
-    if (image_size % 2 != 0):
-        image_size -= 1
-    print(image_size)
-    
-    images_data = np.zeros((image_size * 2, 3, img_width_down, img_height_down))
-    expected = np.zeros((image_size * 2))
-    random_index = torch.randperm(image_size * 2)
-
-    for index_f in range(int(image_size)):
-        images_data[random_index[index_f * 2]] = load_image_from_path(fake[index_f])
-        expected[random_index[index_f * 2]] = 0
-
-        images_data[random_index[index_f * 2 + 1]] = load_image_from_path(real[index_f])
-        expected[random_index[index_f * 2 + 1]] = 1
-
-    print(index_f)
-    return (torch.tensor(images_data).view(-1, 1, 3, 200, 40), torch.tensor(expected).view(-1, 1, 1).float())
-
-
-
-cnn = CNN()
+color, contrast, brightness, sharpness = COLOR, COLOR, BRIGHTNESS, SHARPNESS
+cnn_first = CNN()
+excel_write = excel_writer()
+img_treat = image_treatment()
 
 loss_model = nn.BCELoss()
-optimizer = torch.optim.Adam(cnn.model.parameters(), lr=0.0002)
+optimizer_first = torch.optim.Adam(cnn_first.model.parameters(), lr=0.0002)
 
 def training(cnn, loss_model, optimizer):
-    fake, expected = create_random_training_dataset()
-    for i in range(EPOCH):
-        if (i % 5 == 0):
-            fake, expected = reshuffle_data(fake, expected)
-        for i in range(fake.size()[0]):
-            input = fake[i].float()
+    path, expected, rand_index = create_random_training_dataset()
+    excel_write.add_new_benchmark(img_treat.color, img_treat.contrast, img_treat.brightness, img_treat.sharpness)
+    for j in range(EPOCH):
+        if (j % 5 == 0):
+            rand_index = reshuffle_data(rand_index)
+        loss_av = 0
+        total = 0
+        for i in range(rand_index.size()[0]):
+            batch_image, batch_expected = load_single_batch(img_treat, path, expected, rand_index[i])
+            input = batch_image.float()
             output = cnn.forward(input)
-            loss = loss_model(output, expected[i])
+            loss = loss_model(output, batch_expected)
+            loss_av += loss
+            total += 1
             cnn.backward(loss)
-            print("loss =", loss)
             optimizer.step()
             optimizer.zero_grad()
+        if (total != 0):
+            print("loss after ", j, "EPOCH : ", loss_av / total)
+            excel_write.add_new_line((loss_av / total).item())
+        excel_write.workbook.save('benchmark.xlsx')
+    torch.save(cnn.state_dict(), "{},{},{},{}".format(img_treat.color, img_treat.contrast, img_treat.brightness, img_treat.sharpness))
 
 def predict(cnn):
     overall = 0
-    fake, expected = create_random_predict_dataset()
-    print(fake.size(), expected.size())
-    for i in range(fake.size()[0]):
-        input = fake[i].float()
+    data, expected, rand_index = create_random_predict_dataset()
+    for i in rand_index:
+        input = img_treat.load_image_from_path(data[int(i)]).float().view(1, 3, img_width_down, img_height_down)
         output = cnn.forward(input)
-        if (output.item() >= 0.5 and expected[i].item() >= 0.5):
+        if (output.item() >= 0.5 and expected[int(i)].item() >= 0.5):
             overall += 1
-        if (output.item() < 0.5 and expected[i].item() < 0.5):
+        if (output.item() < 0.5 and expected[int(i)].item() < 0.5):
             overall += 1
-        print(output.item(), expected[i].item(), overall, "out of", i)
+        print("predicted : ", output.item(), "expected : ", expected[int(i)].item())
+    print(overall, "out of", rand_index.size()[0])
+    excel_write.add_new_line("{} out of {}".format(overall, rand_index.size()[0]))
+    excel_write.add_new_line("{}%".format(overall * 100 / rand_index.size()[0]))
 
-training(cnn, loss_model, optimizer)
-predict(cnn)
+def benchmark():
+    file = open("image_trans_tests.csv", "r")
+    reader = csv.reader(file)
+    for i, row in enumerate(reader):
+        if (i == 0):
+            continue
+        cnn_first = CNN()
+        optimizer_first = torch.optim.Adam(cnn_first.model.parameters(), lr=0.0002)
+        img_treat.color, img_treat.contrast, img_treat.brightness, img_treat.sharpness = float(row[0]), float(row[1]), float(row[2]), float(row[3])
+        print(img_treat.color, img_treat.contrast, img_treat.brightness, img_treat.sharpness)
+        training(cnn_first, loss_model, optimizer_first)
+        predict(cnn_first)
+
+benchmark()
+excel_write.workbook.save('benchmark.xlsx')
