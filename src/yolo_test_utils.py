@@ -2,10 +2,16 @@ from time import sleep
 import datetime
 import numpy as np
 import cv2
+import sys
+import torch
+from os import listdir
+import os
 
-# -------------------------------------------------------------------
-# Parameters
-# -------------------------------------------------------------------
+from env import *
+from cnn_model import *
+from image_treatment import *
+from image_gest import *
+from benchmark_excel import *
 
 CONF_THRESHOLD = 0.5
 NMS_THRESHOLD = 0.4
@@ -24,18 +30,46 @@ def get_outputs_names(net):
 
     return [layers_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
+def prediction_from_ai(img_treat, cnn):
+    if not os.path.isfile("./eye_cv.jpeg"):
+        return
+    input = img_treat.load_image_from_path("./eye_cv.jpeg").float().view(1, 3, img_width_down, img_height_down)
+    output = cnn.forward(input)
+    print("predicted a :", output.item())
+    if (output.item() >= 0.5):
+        output = 1
+    else:
+        output = 0
+    print("predicted a :", output)
+
+def is_integer(n):
+    try:
+        float(n)
+    except ValueError:
+        return False
+    else:
+        return float(n).is_integer()
+
+def save_image(prefix, img):
+    file_list = [int(f[:-5]) for f in listdir(".") if ('.jpeg' in f) and is_integer(f[:-5])]
+    file_list.sort()
+    cv2.imwrite(prefix + str(len(file_list)) + ".jpeg", img)
 
 def draw_predict(frame, conf, left, top, right, bottom):
     sizey = bottom - top
     sizex = right - left
     crop_img = frame[top:bottom, left:right]
     if (crop_img.size != 0):
-        print("bob")
-        cv2.imwrite('/home/slooth/pytorchtest/face_cv.jpg', crop_img)
+        cv2.imwrite('face_cv.jpeg', crop_img)
+        # save_image("1100", crop_img)
         eyes = crop_img[int(top*0.431):int(top*0.431+sizey*0.135), left*0:left*0+sizex*1]
-        cv2.imwrite('/home/slooth/pytorchtest/eye_cv.jpg', eyes)
+        if (eyes.any()):
+            cv2.imwrite('eye_cv.jpeg', eyes)
+            # save_image("2100", eyes)
         mouth = crop_img[int(top*0.920):int(top*0.920+sizey*0.193), left*0:left*0+sizex*1]
-        cv2.imwrite('/home/slooth/pytorchtest/mouth_cv.jpg', mouth)
+        if (mouth.any()):
+            cv2.imwrite('mouth_cv.jpeg', mouth)
+            # save_image("3100", mouth)
 
     text = '{:.2f}'.format(conf)
 

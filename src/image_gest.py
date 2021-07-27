@@ -1,24 +1,27 @@
 from os import listdir
 from os.path import isfile, join
 import numpy as np
-from PIL import Image
 import torch
-import torch.nn.functional as F
-import torch.nn as nn
-import torch.utils.data as dataloader
 
 from env import *
-from cnn_model import *
 from image_treatment import *
 
-def get_training_images_from_directories():
-    fake = [PATH_TRAINING_FAKE_CROPPED + f for f in listdir(PATH_TRAINING_FAKE_CROPPED) if ('.jpeg' in f)]
-    real = [PATH_TRAINING_REAL_CROPPED + f for f in listdir(PATH_TRAINING_REAL_CROPPED) if ('.jpeg' in f)]
+def get_training_images_from_directories(face_part):
+    if (face_part == "eyes"):
+        fake = [PATH_TRAINING_FAKE_EYE_CROPPED + f for f in listdir(PATH_TRAINING_FAKE_EYE_CROPPED) if ('.jpeg' in f)]
+        real = [PATH_TRAINING_REAL_EYE_CROPPED + f for f in listdir(PATH_TRAINING_REAL_EYE_CROPPED) if ('.jpeg' in f)]
+        return (fake, real)
+    fake = [PATH_TRAINING_FAKE_MOUTH_CROPPED + f for f in listdir(PATH_TRAINING_FAKE_MOUTH_CROPPED) if ('.jpeg' in f)]
+    real = [PATH_TRAINING_REAL_MOUTH_CROPPED + f for f in listdir(PATH_TRAINING_REAL_MOUTH_CROPPED) if ('.jpeg' in f)]
     return (fake, real)
 
-def get_predict_images_from_directories():
-    fake = [PATH_PREDICT_FAKE_CROPPED + f for f in listdir(PATH_PREDICT_FAKE_CROPPED) if ('.jpeg' in f)]
-    real = [PATH_PREDICT_REAL_CROPPED + f for f in listdir(PATH_PREDICT_REAL_CROPPED) if ('.jpeg' in f)]
+def get_predict_images_from_directories(face_part):
+    if (face_part == "eyes"):
+        fake = [PATH_PREDICT_FAKE_EYE_CROPPED + f for f in listdir(PATH_PREDICT_FAKE_EYE_CROPPED) if ('.jpeg' in f)]
+        real = [PATH_PREDICT_REAL_EYE_CROPPED + f for f in listdir(PATH_PREDICT_REAL_EYE_CROPPED) if ('.jpeg' in f)]
+        return (fake, real)
+    fake = [PATH_PREDICT_FAKE_MOUTH_CROPPED + f for f in listdir(PATH_PREDICT_FAKE_MOUTH_CROPPED) if ('.jpeg' in f)]
+    real = [PATH_PREDICT_REAL_MOUTH_CROPPED + f for f in listdir(PATH_PREDICT_REAL_MOUTH_CROPPED) if ('.jpeg' in f)]
     return (fake, real)
 
 
@@ -30,8 +33,8 @@ def get_max_with_the_current_data(real, fake):
         image_size = len(real) - len(real) % 64
     return (image_size)
 
-def create_random_training_dataset():
-    fake, real = get_training_images_from_directories()
+def create_random_training_dataset(face_part):
+    fake, real = get_training_images_from_directories(face_part)
     image_size = get_max_with_the_current_data(real, fake)
     all_images = []
 
@@ -61,8 +64,8 @@ def load_single_batch(img_treat, path, expected, rand_index):
         batch_expected[i] = expected[int(rand_index[i])]
     return (torch.tensor(images_data).float(), torch.tensor(batch_expected).float())
 
-def create_random_predict_dataset():
-    fake, real = get_predict_images_from_directories()
+def create_random_predict_dataset(face_part):
+    fake, real = get_predict_images_from_directories(face_part)
     image_size = len(real)
     all_images = []
     if (len(fake) < len(real)):
