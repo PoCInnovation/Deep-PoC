@@ -1,0 +1,13 @@
+body {
+    background-color: #f8f8f8;
+}
+
+.dz {
+    border: solid;
+    border-color: #ccc;
+    border-radius: 10px;
+}
+
+.dz:hover {
+    background-color: aliceblue;
+}
