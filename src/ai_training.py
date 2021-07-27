@@ -1,12 +1,7 @@
-from os import listdir
-from os.path import isfile, join
-import numpy as np
-from PIL import Image
 import torch
-import torch.nn.functional as F
 import torch.nn as nn
-import torch.utils.data as dataloader
 import csv
+import sys
 
 from env import *
 from cnn_model import *
@@ -14,16 +9,14 @@ from image_treatment import *
 from image_gest import *
 from benchmark_excel import *
 
-color, contrast, brightness, sharpness = COLOR, COLOR, BRIGHTNESS, SHARPNESS
 cnn_first = CNN()
 excel_write = excel_writer()
 img_treat = image_treatment()
 
 loss_model = nn.BCELoss()
-optimizer_first = torch.optim.Adam(cnn_first.model.parameters(), lr=0.0002)
 
 def training(cnn, loss_model, optimizer):
-    path, expected, rand_index = create_random_training_dataset()
+    path, expected, rand_index = create_random_training_dataset(sys.argv[1])
     excel_write.add_new_benchmark(img_treat.color, img_treat.contrast, img_treat.brightness, img_treat.sharpness)
     for j in range(EPOCH):
         if (j % 5 == 0):
@@ -44,11 +37,11 @@ def training(cnn, loss_model, optimizer):
             print("loss after ", j, "EPOCH : ", loss_av / total)
             excel_write.add_new_line((loss_av / total).item())
         excel_write.workbook.save('benchmark.xlsx')
-    torch.save(cnn.state_dict(), "{},{},{},{}".format(img_treat.color, img_treat.contrast, img_treat.brightness, img_treat.sharpness))
+    torch.save(cnn.state_dict(), "{}_{},{},{},{}".format(sys.argv[1], img_treat.color, img_treat.contrast, img_treat.brightness, img_treat.sharpness))
 
 def predict(cnn):
     overall = 0
-    data, expected, rand_index = create_random_predict_dataset()
+    data, expected, rand_index = create_random_predict_dataset(sys.argv[1])
     for i in rand_index:
         input = img_treat.load_image_from_path(data[int(i)]).float().view(1, 3, img_width_down, img_height_down)
         output = cnn.forward(input)
@@ -74,5 +67,30 @@ def benchmark():
         training(cnn_first, loss_model, optimizer_first)
         predict(cnn_first)
 
-benchmark()
-excel_write.workbook.save('benchmark.xlsx')
+def usage():
+    print("\nThis script lets you run the training for the AI, with the input taking from image_trans_tests.csv.\n")
+    print("Usage:\tai_training.py [facial_part]\n")
+    print("\t-facial_part:    The part of the face on which to train the AI ('eyes' or 'mouth')\n")
+
+def error():
+    if (len(sys.argv) == 1):
+        print("Wrong number of arguments, run with '-h' or '--help' for help")
+        exit(84)
+    if (sys.argv[1] == "-h" or sys.argv[1] == "--help"):
+        usage()
+        exit(1)
+    if (len(sys.argv) != 2):
+        print("Wrong number of arguments, run with '-h' or '--help' for help")
+        exit(84)
+    if (sys.argv[1] != 'eyes' and sys.argv[1] != 'mouth'):
+        print("Wrong argument, must be 'eyes' or 'mouth', run with '-h' or '--help' for help")
+        exit(84)
+
+def main():
+    error()
+    benchmark()
+    excel_write.workbook.save('benchmark.xlsx')
+
+
+if __name__ == "__main__":
+    main()
