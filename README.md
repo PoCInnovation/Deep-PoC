@@ -21,6 +21,8 @@ The prediction is between 0 and 1, (0 being the detction of a deepfake and 1 bei
 
 The Ai suffers from a lack of diversity in the dataset, most of the deepfake comme from https://thispersondoesnotexist.com, therefore it lacks the high capacity to detect deepfakes generated differently.
 
+![](.git/eyes.png?raw=true "Real an deppfake eyes")
+
 ## Web-App
 
 The web-app was created with django with the help of the dropzonejs library (https://www.dropzonejs.com/).
@@ -40,18 +42,6 @@ You'll need Python3 or hight and pip3 installed. Install the requirements with `
         pip3 install -r requirements.txt
         cd DeepPoc
         python manage.py runserver
-
-# Dependencies
-
-|             Dependency           |
-|:--------------------------------:|
-| [opencv-python]()                |
-| [opencv-contrib-python]()        |
-| [numpy]()                        |
-| [torch]()                        |
-| [torchvision]()                  |
-| [Pillow]()                       |
-
 
 # Dataset
 
