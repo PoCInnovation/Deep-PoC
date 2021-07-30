@@ -56,4 +56,4 @@ This only goes for deepfake, to get real images, I suggest the following dataset
 
 ## Maintainers
 
- - [Victor GUyot](https://github.com/MrSIooth)
+ - [Victor Guyot](https://github.com/MrSIooth)
