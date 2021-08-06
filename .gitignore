@@ -1,7 +1,10 @@
 benchmark.xlsx
-*.png
-*.jpeg
-*.jpg
+./predict/*.png
+./predict/*.jpeg
+./predict/.jpg
+./training/*.png
+./training/*.jpeg
+./training/.jpg
 *.mp4
 *.h5
 *.cfg
