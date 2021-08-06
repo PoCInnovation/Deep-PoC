@@ -21,7 +21,7 @@ The prediction is between 0 and 1, (0 being the detction of a deepfake and 1 bei
 
 The Ai suffers from a lack of diversity in the dataset, most of the deepfake comme from https://thispersondoesnotexist.com, therefore it lacks the high capacity to detect deepfakes generated differently.
 
-![](.git/eyes.png?raw=true "Real an deppfake eyes")
+![](.github/assets/eyes.png?raw=true "Real and deppfake eyes")
 
 ## Web-App
 
@@ -31,7 +31,7 @@ It is comprised of a simple drag and drop feature, to add the video of your liki
 
 # Quick Start
 
-You'll need Python3 or hight and pip3 installed. Install the requirements with `pip3 install -r ./src/requirements.txt`
+You'll need Python3 or higher and pip3 installed. Install the requirements with `pip3 install -r requirements.txt`
 
 # Installation:
 
@@ -42,6 +42,16 @@ You'll need Python3 or hight and pip3 installed. Install the requirements with `
         pip3 install -r requirements.txt
         cd DeepPoc
         python manage.py runserver
+
+# Scripts
+
+Different scripts can be used to create / update and train your own dataset and AI. These scripts are located in the: `./src/scripts/` directory.
+
+They are to be launched from the root of the project, here is an exemple:
+
+        python ./src/scripts/manual_test.py -h
+
+Each script possesses a `(-h or --help)` option to view the usage of the script.
 
 # Dataset
 
