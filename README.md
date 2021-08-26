@@ -29,6 +29,14 @@ The web-app was created with django with the help of the dropzonejs library (htt
 
 It is comprised of a simple drag and drop feature, to add the video of your liking to be analyzed by the AI.
 
+Here is the list of supported extension:
+|        Extension                        | Operational |
+|:---------------------------------------:|:-----------:|
+|.mp4   | :heavy_check_mark: |
+| .jpeg | :heavy_check_mark: |
+| .jpg  | :heavy_check_mark: |
+| .png  | :x: |
+
 ![](.github/assets/frontend.png?raw=true "Real and deppfake eyes")
 
 # Quick Start 🏁
