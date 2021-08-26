@@ -1,0 +1,220 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Font awesome -->
+  <!-- custom css & js -->
+  <!-- <link rel="stylesheet" href="../static/style.css">
+    <script src="{% static 'dropzone.js' %}"></script> -->
+  <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="{% static 'fontawesome_free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+  <script src="{% static 'fontawesome_free/js/all.min.js' %}"></script>
+  <style>
+    body {
+      background-color: #f8f8f8;
+    }
+
+    .inputfile {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+    }
+
+    .inputfile+label {
+      font-size: 1.25em;
+      font-weight: 700;
+      color: #1976d2;
+      background-color: rgb(255, 255, 255);
+      display: inline-block;
+      cursor: pointer;
+      transition: 0.4s;
+    }
+
+    .results {
+      font-size: 1.25em;
+      font-weight: 700;
+      display: inline-block;
+      cursor: pointer;
+      transition: 0.4s;
+    }
+
+    .inputfile:focus+label,
+    .inputfile+label:hover {
+      background-color: rgba(199, 199, 199, 0.3);
+    }
+
+    .shadow-2 {
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .shadow-1 {
+      box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .card {
+      width: 100%;
+      height: 300px;
+      border-radius: 40px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .button {
+      background-color: #1976d2;
+      border: none;
+      color: white;
+      padding: 15px 48px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      text-transform: capitalize;
+      font-weight: bold;
+      border-radius: 20px;
+      box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
+      transition: 0.4s;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    a:hover {
+      color: rgba(255, 255, 255, 0.781);
+    }
+
+    .button:hover {
+      background-color: #0059b3;
+      box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .dialogue-transition {
+      transition: visibility 0s, opacity 0.4s linear;
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .loading {
+      visibility: hidden
+    }
+  </style>
+  <title>DeepPoC</title>
+</head>
+
+<body>
+  <div class="shadow-2" style="width: 100%; display: flex; justify-content: center; padding: 15px 0px; margin: 0px 0px 30px 0px; background-color: #1976d2; color: rgb(255, 255, 255); font-weight: bold;">
+    <div style="width: 10%;"></div>
+    <h1 style="width: 80%; text-align: center; margin: 0px">Deep-PoC</h1>
+    <div style="width: 10%; height: 100%; display: flex; justify-content: flex-end; align-items: center;">
+      <div style="width: 100%; height: 100%; display: flex; justify-content: flex-end; align-items: center; padding-right: 10px;">
+        <a href="https://github.com/PoCInnovation/Deep-PoC"><i class="fab fa-github" style="font-size: 40px;"></i></a>
+      </div>
+    </div>
+  </div>
+  <div style="width: 100%; display: flex; justify-content: center;">
+      <form id="my-form" method="POST" action="/" enctype="multipart/form-data" style="width: 700px; display: flex; justify-content: center; flex-wrap: wrap;">
+        {% csrf_token %}
+        <input type="file" name="file" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple>
+        <label for="file" class="card shadow-2" style="display: flex; flex-wrap: wrap; align-items: center;">
+          <div style="flex: 12; font-size: 70px; display: flex; align-items: flex-end;">
+            <span class="material-icons" style="font-size: 70px;">&#xE2C3;</span>
+          </div>
+          <div style="flex: 12; display: flex; align-items: flex-start;">
+            <span id="filename">Choose a file</span>
+          </div>
+        </label>
+        <button class="button" type="submit">Upload file</button>
+      </form>
+  </div>
+  <div style="width: 100%; display: flex; justify-content: center; margin: 30px 0px 0px 0px; text-align: center;">
+    <div style="width: 70%; font-weight: bold;">
+      Deep-PoC is an AI drivin project used to detect deepfakes in video or images. It uses known default of GAN generated AI such as the eyes and the mouth to determine whether the image or video contains a deepfake.
+    </div>
+  </div>
+  {% if fileName %}
+    {% if status == "fake" %}
+      <div class="dialogue-transition" style="position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center;">
+        <div class="dialogue-transition" style="width: 100%; display: flex; justify-content: center;">
+          <div class="dialogue-transition" style="width: 700px; display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
+              <div class="card shadow-2 dialogue-transition" style="display: flex; flex-wrap: wrap; align-items: center; background-color: rgb(255, 123, 123);">
+                  <div class="dialogue-transition" style="flex: 12; display: flex; align-items: center;">
+                      <span id="" class="results dialogue-transition">"{{fileName}}" <br> contains a DeepFake</span>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="dialogue-transition" style="position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center;">
+        <div class="dialogue-transition" style="width: 100%; display: flex; justify-content: center;">
+          <div class="dialogue-transition" style="width: 700px; display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
+              <div class="card shadow-2 dialogue-transition" style="display: flex; flex-wrap: wrap; align-items: center; background-color: rgb(103, 255, 136);">
+                  <div class="dialogue-transition" style="flex: 12; display: flex; align-items: center;">
+                      <span id="" class="results dialogue-transition">"{{fileName}}" <br> contains a DeepFake</span>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+  <div class="loading" style="position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center;">
+    <div class="spinner-border" role="status" style="width: 3rem; height: 3rem;">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</body>
+<script>
+  var inputs = document.querySelectorAll('.inputfile');
+
+  var p = document.querySelector('.dialogue-transition ');
+  var form = document.querySelector('#my-form')
+  function showAlert()
+  {
+    var all_p = document.querySelectorAll('.dialogue-transition ');
+    all_p.forEach(p => {
+      p.style.visibility = "hidden"
+      p.style.opacity = 0
+    })
+  }
+  if (p)
+    p.onclick = showAlert;
+
+  form.addEventListener('submit', function () {
+    var loader = document.querySelector('.loading')
+    loader.style.visibility = 'visible'
+    return false;
+  });
+
+  Array.prototype.forEach.call(inputs, function (input) {
+    var label = input.nextElementSibling,
+      labelVal = label.innerHTML;
+    input.addEventListener('change', function (e) {
+      var fileName = '';
+      if (this.files && this.files.length > 1)
+        fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length);
+      else
+        fileName = e.target.value.split("\\").pop();
+
+      if (fileName)
+        label.querySelector('#filename').innerHTML = fileName;
+      else
+        label.innerHTML = labelVal;
+    });
+  });
+</script>
+
+</html>
