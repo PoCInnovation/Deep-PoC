@@ -7,7 +7,7 @@
 [Quick Start](#Quick-Start)\
 [Maintainers](#Maintainers)
 
-# Description
+# Description 🏭
 Deep-PoC is a deepFake detection tool designed to detect deepfakes from videos or images using artificial intelligence.
 
 The detection relies on two main weakness of deepfake : The mouth and the eyes. Deep-PoC focuses on these main parts to make its prediction.
@@ -31,11 +31,11 @@ It is comprised of a simple drag and drop feature, to add the video of your liki
 
 ![](.github/assets/frontend.png?raw=true "Real and deppfake eyes")
 
-# Quick Start
+# Quick Start 🏁
 
 You'll need Python3 or higher and pip3 installed. Install the requirements with `pip3 install -r requirements.txt`
 
-# Installation:
+# Installation 🛠️
 
 ## Web Application
 
@@ -66,6 +66,6 @@ This only goes for deepfake, to get real images, I suggest the following dataset
 ------------
 
 
-## Maintainers
+## Maintainers 🧑‍🤝‍🧑
 
  - [Victor Guyot](https://github.com/MrSIooth)
