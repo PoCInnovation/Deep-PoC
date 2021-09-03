@@ -7,6 +7,3 @@ benchmark.xlsx
 ./training/.jpg
 *.mp4
 *.h5
-*.cfg
-*.weights
-yolo_params/*
