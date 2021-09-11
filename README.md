@@ -41,17 +41,16 @@ Here is the list of supported extension:
 
 # Quick Start 🏁
 
-You'll need Python3 or higher and pip3 installed. Install the requirements with `pip3 install -r requirements.txt`
+You'll need Python3 or higher, pip3 and docker installed. Install the requirements with `pip3 install -r requirements.txt`
 
 # Installation 🛠️
 
 ## Web Application
 
         git clone git@github.com:PoCInnovation/Deep-PoC.git
-        cd Deep-PoC
-        pip3 install -r requirements.txt
-        cd DeepPoc
+        cd Deep-PoC/DeepPoc
         python manage.py runserver
+        docker-compose up
 
 # Scripts
 

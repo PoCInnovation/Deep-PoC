@@ -62,15 +62,12 @@ def draw_predict(frame, conf, left, top, right, bottom):
     crop_img = frame[top:bottom, left:right]
     if (crop_img.size != 0):
         cv2.imwrite('face_cv.jpeg', crop_img)
-        # save_image("1100", crop_img)
-        eyes = crop_img[int(top*0.431):int(top*0.431+sizey*0.135), left*0:left*0+sizex*1]
+        eyes = crop_img[int(sizey*0.310):int(sizey*0.310+sizey*0.170), left*0:left*0+sizex*1]
         if (eyes.any()):
             cv2.imwrite('eye_cv.jpeg', eyes)
-            # save_image("2100", eyes)
-        mouth = crop_img[int(top*0.920):int(top*0.920+sizey*0.193), left*0:left*0+sizex*1]
+        mouth = crop_img[int(sizey*0.730):int(sizey*0.730+sizey*0.193), left*0:left*0+sizex*1]
         if (mouth.any()):
             cv2.imwrite('mouth_cv.jpeg', mouth)
-            # save_image("3100", mouth)
 
     text = '{:.2f}'.format(conf)
 

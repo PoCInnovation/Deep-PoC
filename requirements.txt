@@ -4,4 +4,7 @@ numpy
 torch
 torchvision
 Pillow
-Django
+Django==3.1
+matplotlib
+openpyxl
+fontawesome-free
