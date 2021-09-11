@@ -3,15 +3,11 @@
 <html lang="en">
 
 <head>
-  <!-- Required meta tags -->
   <meta charset="utf-8">
 
-  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <!-- Font awesome -->
   <!-- custom css & js -->
-  <!-- <link rel="stylesheet" href="../static/style.css">
-    <script src="{% static 'dropzone.js' %}"></script> -->
   <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="{% static 'fontawesome_free/css/all.min.css' %}" rel="stylesheet" type="text/css">
@@ -44,7 +40,6 @@
       font-size: 1.25em;
       font-weight: 700;
       display: inline-block;
-      cursor: pointer;
       transition: 0.4s;
     }
 
@@ -133,8 +128,13 @@
             <span class="material-icons" style="font-size: 70px;">&#xE2C3;</span>
           </div>
           <div style="flex: 12; display: flex; align-items: flex-start;">
-            <span id="filename">Choose a file</span>
+            <div>
+              <span id="filename">Choose a file</span>
+            </div>
           </div>
+          {% if error %}
+            <span style="padding-bottom: 10px; font-size:14px; color: red;">{{error}}</span>
+          {% endif %}
         </label>
         <button class="button" type="submit">Upload file</button>
       </form>
@@ -148,10 +148,16 @@
     {% if status == "fake" %}
       <div class="dialogue-transition" style="position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center;">
         <div class="dialogue-transition" style="width: 100%; display: flex; justify-content: center;">
-          <div class="dialogue-transition" style="width: 700px; display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
-              <div class="card shadow-2 dialogue-transition" style="display: flex; flex-wrap: wrap; align-items: center; background-color: rgb(255, 123, 123);">
-                  <div class="dialogue-transition" style="flex: 12; display: flex; align-items: center;">
-                      <span id="" class="results dialogue-transition">"{{fileName}}" <br> contains a DeepFake</span>
+          <div class="dialogue-transition" style="width: 400px; display: flex; justify-content: center; flex-wrap: wrap; align-items: center; border-radius: 10px; overflow: hidden;">
+              <div class="card shadow-2 dialogue-transition" style="height: 105px; display: flex; flex-wrap: wrap; flex-direction: row; background-color: rgb(255, 255, 255); border-radius: 10px; margin: 0px">
+                  <div style="background-color: rgb(255, 0, 0); width: 12px; height: 100%; position: relative; top: 0px; left: -1px;">
+                  </div>
+                  <div style="display: flex; align-items: center; padding-left: 15px;">
+                    <i class="far fa-times-circle" style="font-size: 40px; color: red"></i>
+                  </div>
+                  <div class="dialogue-transition" style="flex: 12; display: flex; flex-direction: column; text-align: start; justify-content: center; padding-left: 15px;">
+                      <span class="results  dialogue-transition">File contains a DeepFake</span>
+                      <span style="font-size: 0.75em; font-weight: 500; color:rgba(0, 0, 0, 0.8)" class="dialogue-transition">"{{fileName}}" contains a DeepFake</span>
                   </div>
               </div>
           </div>
@@ -160,13 +166,19 @@
     {% else %}
       <div class="dialogue-transition" style="position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center;">
         <div class="dialogue-transition" style="width: 100%; display: flex; justify-content: center;">
-          <div class="dialogue-transition" style="width: 700px; display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
-              <div class="card shadow-2 dialogue-transition" style="display: flex; flex-wrap: wrap; align-items: center; background-color: rgb(103, 255, 136);">
-                  <div class="dialogue-transition" style="flex: 12; display: flex; align-items: center;">
-                      <span id="" class="results dialogue-transition">"{{fileName}}" <br> contains a DeepFake</span>
-                  </div>
-              </div>
-          </div>
+          <div class="dialogue-transition" style="width: 400px; display: flex; justify-content: center; flex-wrap: wrap; align-items: center; border-radius: 10px; overflow: hidden;">
+            <div class="card shadow-2 dialogue-transition" style="height: 105px; display: flex; flex-wrap: wrap; flex-direction: row; background-color: rgb(255, 255, 255); border-radius: 10px; margin: 0px">
+                <div style="background-color: rgb(0, 202, 0); width: 12px; height: 100%; position: relative; top: 0px; left: -1px;">
+                </div>
+                <div style="display: flex; align-items: center; padding-left: 15px;">
+                  <i class="far fa-times-circle" style="font-size: 40px; color: rgb(0, 202, 0)"></i>
+                </div>
+                <div class="dialogue-transition" style="flex: 12; display: flex; flex-direction: column; text-align: start; justify-content: center; padding-left: 15px;">
+                    <span class="results  dialogue-transition">File doesn't contains a DeepFake</span>
+                    <span style="font-size: 0.75em; font-weight: 500; color:rgba(0, 0, 0, 0.8)" class="dialogue-transition">"{{fileName}}" doesn't contains a DeepFake</span>
+                </div>
+            </div>
+        </div>
         </div>
       </div>
     {% endif %}

@@ -1,0 +1,10 @@
+opencv-python
+opencv-contrib-python
+numpy
+torch
+torchvision
+Pillow
+Django==3.1
+matplotlib
+openpyxl
+fontawesome-free
