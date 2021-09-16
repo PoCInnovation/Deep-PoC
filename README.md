@@ -14,6 +14,8 @@ The detection relies on two main weakness of deepfake : The mouth and the eyes. 
 
 The project is comprised of 2 parts : The Web-App, and AI.
 
+The website can be found at https://deepoc.poc-innovation.com/
+
 ## AI
 
 The project's AI was created using the library called PyTorch. The AI is a imple CNN with 4 layers of convolution and 3 linear layers.
@@ -37,7 +39,7 @@ Here is the list of supported extension:
 | .jpg  | :heavy_check_mark: |
 | .png  | :x: |
 
-![](.github/assets/frontend.png?raw=true "Real and deppfake eyes")
+![](.github/assets/demo_deepPoC.gif?raw=true "Real and deppfake eyes")
 
 # Quick Start 🏁
 
