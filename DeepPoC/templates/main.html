@@ -144,7 +144,7 @@
       Deep-PoC is an AI drivin project used to detect deepfakes in video or images. It uses known default of GAN generated AI such as the eyes and the mouth to determine whether the image or video contains a deepfake.
     </div>
   </div>
-  {% if fileName %}
+  {% if status %}
     {% if status == "fake" %}
       <div class="dialogue-transition" style="position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center;">
         <div class="dialogue-transition" style="width: 100%; display: flex; justify-content: center;">
@@ -163,7 +163,7 @@
           </div>
         </div>
       </div>
-    {% else %}
+    {% elif status == "real" %}
       <div class="dialogue-transition" style="position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center;">
         <div class="dialogue-transition" style="width: 100%; display: flex; justify-content: center;">
           <div class="dialogue-transition" style="width: 400px; display: flex; justify-content: center; flex-wrap: wrap; align-items: center; border-radius: 10px; overflow: hidden;">
@@ -171,11 +171,29 @@
                 <div style="background-color: rgb(0, 202, 0); width: 12px; height: 100%; position: relative; top: 0px; left: -1px;">
                 </div>
                 <div style="display: flex; align-items: center; padding-left: 15px;">
-                  <i class="far fa-times-circle" style="font-size: 40px; color: rgb(0, 202, 0)"></i>
+                  <i class="fas fa-check-circle" style="font-size: 40px; color: rgb(0, 202, 0)"></i>
                 </div>
                 <div class="dialogue-transition" style="flex: 12; display: flex; flex-direction: column; text-align: start; justify-content: center; padding-left: 15px;">
                     <span class="results  dialogue-transition">File doesn't contains a DeepFake</span>
                     <span style="font-size: 0.75em; font-weight: 500; color:rgba(0, 0, 0, 0.8)" class="dialogue-transition">"{{fileName}}" doesn't contains a DeepFake</span>
+                </div>
+            </div>
+        </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="dialogue-transition" style="position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center;">
+        <div class="dialogue-transition" style="width: 100%; display: flex; justify-content: center;">
+          <div class="dialogue-transition" style="width: 400px; display: flex; justify-content: center; flex-wrap: wrap; align-items: center; border-radius: 10px; overflow: hidden;">
+            <div class="card shadow-2 dialogue-transition" style="height: 105px; display: flex; flex-wrap: wrap; flex-direction: row; background-color: rgb(255, 255, 255); border-radius: 10px; margin: 0px">
+                <div style="background-color: orange; width: 12px; height: 100%; position: relative; top: 0px; left: -1px;">
+                </div>
+                <div style="display: flex; align-items: center; padding-left: 15px;">
+                  <i class="fas fa-minus-circle" style="font-size: 40px; color: orange"></i>
+                </div>
+                <div class="dialogue-transition" style="flex: 12; display: flex; flex-direction: column; text-align: start; justify-content: center; padding-left: 15px;">
+                    <span class="results  dialogue-transition">Coundn't identify a face</span>
+                    <span style="font-size: 0.75em; font-weight: 500; color:rgba(0, 0, 0, 0.8)" class="dialogue-transition">"{{fileName}}" doesn't seem to contain a face</span>
                 </div>
             </div>
         </div>
