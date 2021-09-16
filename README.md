@@ -16,10 +16,10 @@ The project is comprised of 2 parts : The Web-App, and AI.
 
 ## AI
 
-The project's AI was created using the library called Pytorch. The AI is a imple CNN with 4 layers of convolution and 3 linear layer.
+The project's AI was created using the library called PyTorch. The AI is a imple CNN with 4 layers of convolution and 3 linear layers.
 The prediction is between 0 and 1, (0 being the detction of a deepfake and 1 being the detection of a real face).
 
-The Ai suffers from a lack of diversity in the dataset, most of the deepfake comme from https://thispersondoesnotexist.com, therefore it lacks the high capacity to detect deepfakes generated differently.
+The Ai suffers from a lack of diversity in the dataset, most of the deepfake come from https://thispersondoesnotexist.com, therefore it lacks the high capacity to detect deepfakes generated differently.
 
 ![](.github/assets/eyes.png?raw=true "Real and deppfake eyes")
 
@@ -66,7 +66,7 @@ Each script possesses a `(-h or --help)` option to view the usage of the script.
 
 The Dataset used during this project doesn't have an easy source (For now).
 
-To build your own dataset, oyu have a script to extract Deepfakes from https://thispersondoesnotexist.com.</br>
+To build your own dataset, you have a script to extract Deepfakes from https://thispersondoesnotexist.com.</br>
 This only goes for deepfake, to get real images, I suggest the following dataset: https://github.com/NVlabs/ffhq-dataset.
 
 
